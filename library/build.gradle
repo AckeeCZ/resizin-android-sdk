@@ -1,5 +1,27 @@
 apply plugin: 'java'
 
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
+version = '1.0.3'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Android Library for Ackee Image server',
+                'Implementation-Version': version
+    }
+}
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'outputs'
+        }
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
+
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
