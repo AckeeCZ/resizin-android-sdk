@@ -9,7 +9,8 @@ public enum Gravity {
     SE("se"),
     NW("nw"),
     NE("ne"),
-    CENTER("center");
+    CENTER("center"),
+    FACE("face");
 
     private final String value;
 
