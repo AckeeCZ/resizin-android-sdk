@@ -5,6 +5,7 @@ public enum Crop {
     FILL("fill"),
     FIT("fit"),
     SCALE("scale"),
+    FACE("face"),
     PAD("pad");
 
     private final String value;
