@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.plaf.TextUI;
+
+import static java.awt.SystemColor.text;
+
 /**
  * Image server instance with variable app id and server url.
  * Provides UrlGenerator for building image url with various modificators
@@ -48,6 +52,8 @@ public class ImageServer {
         boolean cropSet;
         String appId;
         boolean gravitySet;
+        int quality;
+        String extension;
 
         private UrlGenerator(String appId, String serverUrl) {
             this.width = Integer.MIN_VALUE;
@@ -57,6 +63,8 @@ public class ImageServer {
             this.gravity = Gravity.CENTER;
             this.appId = appId;
             this.serverUrl = serverUrl;
+            this.quality = -1;
+            this.extension = "";
         }
 
         /**
@@ -110,6 +118,7 @@ public class ImageServer {
         /**
          * Specify gravity of cropped image. See {@link Gravity} for
          * available options
+         *
          * @param gravity of cropped image
          * @return UrlGenerator instance
          */
@@ -120,7 +129,30 @@ public class ImageServer {
         }
 
         /**
+         * Specify quality of image in percent
+         *
+         * @param quality percentual quality of image, values 0 - 100
+         * @return UrlGenerator instance
+         */
+        public ImageServer.UrlGenerator quality(int quality) {
+            this.quality = quality;
+            return this;
+        }
+
+        /**
+         * Specify extension of image
+         *
+         * @param extension extension eg. jpg
+         * @return UrlGenerator instance
+         */
+        public ImageServer.UrlGenerator extension(String extension) {
+            this.extension = extension;
+            return this;
+        }
+
+        /**
          * Generates url with specified parameters
+         *
          * @param imageId id of image on image server
          * @return built url as String
          */
@@ -152,10 +184,16 @@ public class ImageServer {
             if (this.grayscale) {
                 transformations.add("f_greyscale");
             }
+            if (quality >= 0) {
+                transformations.add(String.format(Locale.getDefault(), "q_%d", this.quality));
+            }
 
             builder.append(this.join("-", transformations));
             builder.append("/");
             builder.append(imageId);
+            if (this.extension != null && this.extension.length() >= 0) {
+                builder.append(".").append(extension);
+            }
             return builder.toString();
         }
 
