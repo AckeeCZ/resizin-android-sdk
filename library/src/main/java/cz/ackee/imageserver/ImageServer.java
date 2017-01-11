@@ -191,7 +191,7 @@ public class ImageServer {
             builder.append(this.join("-", transformations));
             builder.append("/");
             builder.append(imageId);
-            if (this.extension != null && this.extension.length() >= 0) {
+            if (this.extension != null && this.extension.length() > 0) {
                 builder.append(".").append(extension);
             }
             return builder.toString();
