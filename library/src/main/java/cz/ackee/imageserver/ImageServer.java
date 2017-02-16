@@ -54,6 +54,7 @@ public class ImageServer {
         boolean gravitySet;
         int quality;
         String extension;
+        int upscale = -1;
 
         private UrlGenerator(String appId, String serverUrl) {
             this.width = Integer.MIN_VALUE;
@@ -65,6 +66,7 @@ public class ImageServer {
             this.serverUrl = serverUrl;
             this.quality = -1;
             this.extension = "";
+            this.upscale = -1;
         }
 
         /**
@@ -151,6 +153,17 @@ public class ImageServer {
         }
 
         /**
+         * Indicator if image should be upscaled if size is larger than original dimensions
+         *
+         * @param upscale boolean indicator
+         * @return UrlGenerator instance
+         */
+        public ImageServer.UrlGenerator upscale(boolean upscale) {
+            this.upscale = upscale ? 1 : 0;
+            return this;
+        }
+
+        /**
          * Generates url with specified parameters
          *
          * @param imageId id of image on image server
@@ -186,6 +199,9 @@ public class ImageServer {
             }
             if (quality >= 0) {
                 transformations.add(String.format(Locale.getDefault(), "q_%d", this.quality));
+            }
+            if (upscale >= 0) {
+                transformations.add(String.format(Locale.getDefault(), "u_%d", this.upscale));
             }
 
             builder.append(this.join("-", transformations));
