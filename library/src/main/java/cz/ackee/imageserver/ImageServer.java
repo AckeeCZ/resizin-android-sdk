@@ -179,29 +179,29 @@ public class ImageServer {
             builder.append("image").append("/");
             List<String> transformations = new ArrayList<>();
             if (this.widthSet) {
-                transformations.add(String.format(Locale.getDefault(), "w_%d", this.width));
+                transformations.add(String.format(Locale.US, "w_%d", this.width));
             }
 
             if (this.heightSet) {
-                transformations.add(String.format(Locale.getDefault(), "h_%d", this.height));
+                transformations.add(String.format(Locale.US, "h_%d", this.height));
             }
 
             if (this.cropSet) {
-                transformations.add(String.format(Locale.getDefault(), "c_%s", this.crop));
+                transformations.add(String.format(Locale.US, "c_%s", this.crop));
             }
 
             if (this.gravitySet) {
-                transformations.add(String.format(Locale.getDefault(), "g_%s", this.gravity));
+                transformations.add(String.format(Locale.US, "g_%s", this.gravity));
             }
 
             if (this.grayscale) {
                 transformations.add("f_greyscale");
             }
             if (quality >= 0) {
-                transformations.add(String.format(Locale.getDefault(), "q_%d", this.quality));
+                transformations.add(String.format(Locale.US, "q_%d", this.quality));
             }
             if (upscale >= 0) {
-                transformations.add(String.format(Locale.getDefault(), "u_%d", this.upscale));
+                transformations.add(String.format(Locale.US, "u_%d", this.upscale));
             }
 
             builder.append(this.join("-", transformations));
