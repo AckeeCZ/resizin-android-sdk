@@ -55,8 +55,13 @@ public class ImageServer {
         int quality;
         String extension;
         int upscale = -1;
+        int borderTop = -1;
+        int borderLeft = -1;
+        int borderRight = -1;
+        int borderBottom = -1;
+        String background;
 
-        private UrlGenerator(String appId, String serverUrl) {
+        UrlGenerator(String appId, String serverUrl) {
             this.width = Integer.MIN_VALUE;
             this.height = Integer.MIN_VALUE;
             this.grayscale = false;
@@ -164,6 +169,53 @@ public class ImageServer {
         }
 
         /**
+         * Specify additional border of the image
+         *
+         * @param border width of the border (must be >= 0)
+         * @return UrlGenerator instance
+         */
+        public ImageServer.UrlGenerator border(int border) {
+            this.borderTop = this.borderLeft = this.borderRight = this.borderBottom = border;
+            return this;
+        }
+
+        /**
+         * Specify additional individual borders of the image
+         *
+         * @param borderTop width of the top border (must be >= 0)
+         * @param borderLeft width of the top border (must be >= 0)
+         * @param borderRight width of the top border (must be >= 0)
+         * @param borderBottom width of the top border (must be >= 0)
+         * @return UrlGenerator instance
+         */
+        public ImageServer.UrlGenerator border(int borderTop, int borderLeft, int borderRight, int borderBottom) {
+            this.borderTop = borderTop;
+            this.borderLeft =  borderLeft;
+            this.borderRight = borderRight;
+            this.borderBottom = borderBottom;
+            return this;
+        }
+
+        /**
+         * Specify background of the image when cropping to fit or using borders
+         *
+         * @param background color of the background (i.e. "00bcd4" or "#00bcd4")
+         * @return UrlGenerator instance
+         */
+        public ImageServer.UrlGenerator background(String background) {
+            if (background != null) {
+                if (background.matches("#?[0-9a-fA-F]{6}")) {
+                    this.background = background.replace("#", "");
+                } else {
+                    throw new IllegalArgumentException("Wrong format of color, use format 'RRGGBB' or '#RRGGBB' (i.e. '#00bcd4')");
+                }
+            } else {
+                this.background = null;
+            }
+            return this;
+        }
+
+        /**
          * Generates url with specified parameters
          *
          * @param imageId id of image on image server
@@ -203,6 +255,13 @@ public class ImageServer {
             if (upscale >= 0) {
                 transformations.add(String.format(Locale.US, "u_%d", this.upscale));
             }
+            if (borderTop >= 0 && borderLeft >= 0 && borderRight >= 0 && borderBottom >= 0) {
+                transformations.add(String.format(Locale.US, "b_%d_%d_%d_%d", borderTop, borderLeft, borderRight, borderBottom));
+            }
+            if (background != null) {
+                transformations.add(String.format(Locale.US, "bg_%s", background));
+            }
+
 
             builder.append(this.join("-", transformations));
             builder.append("/");
