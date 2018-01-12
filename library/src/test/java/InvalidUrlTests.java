@@ -4,7 +4,7 @@ import cz.ackee.imageserver.ImageServer;
 import cz.ackee.imageserver.InvalidUrlException;
 
 /**
- * TODO add class description
+ * Tests for invalid urls
  *
  * @author David Bilik [david.bilik@ackee.cz]
  * @since 12/01/2018

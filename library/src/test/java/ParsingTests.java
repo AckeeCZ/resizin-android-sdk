@@ -7,7 +7,7 @@ import cz.ackee.imageserver.ImageServer;
 import static org.junit.Assert.assertEquals;
 
 /**
- * TODO add class description
+ * Tests for parsing of urls
  *
  * @author David Bilik [david.bilik@ackee.cz]
  * @since 12/01/2018
