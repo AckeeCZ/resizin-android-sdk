@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.plaf.TextUI;
-
-import static java.awt.SystemColor.text;
-
 /**
  * Image server instance with variable app id and server url.
  * Provides UrlGenerator for building image url with various modificators
@@ -38,6 +34,15 @@ public class ImageServer {
     }
 
     /**
+     * Parse given url and parse it to instance
+     * @param url
+     * @return
+     */
+    public ImageServer.UrlGenerator withUrl(String url) {
+        return new ImageServer.UrlGenerator(this.appId, this.serverUrl).parseUrl(url);
+    }
+
+    /**
      * Generator of url to image server
      */
     public static class UrlGenerator {
@@ -60,6 +65,7 @@ public class ImageServer {
         int borderRight = -1;
         int borderBottom = -1;
         String background;
+        String imageId;
 
         UrlGenerator(String appId, String serverUrl) {
             this.width = Integer.MIN_VALUE;
@@ -72,6 +78,7 @@ public class ImageServer {
             this.quality = -1;
             this.extension = "";
             this.upscale = -1;
+            imageId = null;
         }
 
         /**
@@ -182,15 +189,15 @@ public class ImageServer {
         /**
          * Specify additional individual borders of the image
          *
-         * @param borderTop width of the top border (must be >= 0)
-         * @param borderLeft width of the top border (must be >= 0)
-         * @param borderRight width of the top border (must be >= 0)
+         * @param borderTop    width of the top border (must be >= 0)
+         * @param borderLeft   width of the top border (must be >= 0)
+         * @param borderRight  width of the top border (must be >= 0)
          * @param borderBottom width of the top border (must be >= 0)
          * @return UrlGenerator instance
          */
         public ImageServer.UrlGenerator border(int borderTop, int borderLeft, int borderRight, int borderBottom) {
             this.borderTop = borderTop;
-            this.borderLeft =  borderLeft;
+            this.borderLeft = borderLeft;
             this.borderRight = borderRight;
             this.borderBottom = borderBottom;
             return this;
@@ -213,6 +220,18 @@ public class ImageServer {
                 this.background = null;
             }
             return this;
+        }
+
+        public String getImageId() {
+            return imageId;
+        }
+
+        /**
+         * Generate url with previously parsed imageId
+         * @return built url as String
+         */
+        public String generate() {
+            return generate(imageId);
         }
 
         /**
@@ -282,6 +301,72 @@ public class ImageServer {
             }
 
             return builder.toString();
+        }
+
+        private ImageServer.UrlGenerator parseUrl(String url) {
+            try {
+                String[] parts = url.split("/");
+                String imageId = parts[parts.length - 1];
+                if (!parts[4].equals("image")) {
+                    throw new Exception();
+                }
+                if (imageId.contains(".")) {
+                    this.imageId = imageId.split("\\.")[0];
+                    this.extension = imageId.split("\\.")[1];
+                } else {
+                    this.imageId = imageId;
+                }
+
+                String modificatorsText = parts[parts.length - 2];
+                String[] modificators = modificatorsText.split("-");
+                for (String modificator : modificators) {
+                    if (modificator.startsWith("w")) {
+                        this.width = Integer.parseInt(modificator.substring(2));
+                        widthSet = true;
+                    }
+                    if (modificator.startsWith("h")) {
+                        this.height = Integer.parseInt(modificator.substring(2));
+                        heightSet = true;
+                    }
+                    if (modificator.startsWith("c")) {
+                        cropSet = true;
+                        crop = Crop.fromValue(modificator.substring(2));
+                    }
+
+                    if (modificator.startsWith("g")) {
+                        gravitySet = true;
+                        gravity = Gravity.fromValue(modificator.substring(2));
+                    }
+
+                    if (modificator.startsWith("f")) {
+                        grayscale = true;
+                    }
+
+                    if (modificator.startsWith("q")) {
+                        quality = Integer.parseInt(modificator.substring(2));
+                    }
+
+                    if (modificator.startsWith("u")) {
+                        this.upscale = Integer.parseInt(modificator.substring(2));
+                    }
+
+                    if (modificator.startsWith("b_")) {
+                        String numbersString = modificator.substring(2);
+                        String[] numbers = numbersString.split("_");
+                        borderTop = Integer.parseInt(numbers[0]);
+                        borderLeft = Integer.parseInt(numbers[1]);
+                        borderRight = Integer.parseInt(numbers[2]);
+                        borderBottom = Integer.parseInt(numbers[3]);
+                    }
+                    if (modificator.startsWith("bg")) {
+                        this.background = modificator.substring(3);
+                    }
+                }
+
+                return this;
+            } catch (Exception e) {
+                throw new InvalidUrlException("Url " + url + " is in incorrect format", e);
+            }
         }
     }
 }

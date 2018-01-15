@@ -17,4 +17,13 @@ public enum Crop {
     public String toString() {
         return this.value;
     }
+
+    public static Crop fromValue(String value) {
+        for (Crop c : values()) {
+            if (c.value.equals(value)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Invalid value " + value);
+    }
 }

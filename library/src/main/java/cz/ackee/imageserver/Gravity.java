@@ -21,4 +21,14 @@ public enum Gravity {
     public String toString() {
         return this.value;
     }
+
+
+    public static Gravity fromValue(String value) {
+        for (Gravity c : values()) {
+            if (c.value.equals(value)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Invalid value " + value);
+    }
 }

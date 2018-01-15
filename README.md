@@ -35,3 +35,16 @@ public void loadImage(String imageId, ImageView img) {
 }
 ```
 
+
+### Parsing of urls
+If you have full url, for example from server, and you want to parse it again to ImageServer.UrlGenerator instance, you can do
+
+```java
+public void parseUrl(String url) {
+     imageServer.urlGenerator()
+            .withUrl(url)
+            .background("#ffffff")
+            .generate();
+}
+```
+
