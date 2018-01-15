@@ -2,7 +2,7 @@
 Library providing Url generator for Ackee Image Server
 ## Dependencies
 ```groovy
-compile 'cz.ackee:imageserver:1.2.3'
+compile 'cz.ackee:imageserver:1.2.4'
 ```
 
 ## Usages
