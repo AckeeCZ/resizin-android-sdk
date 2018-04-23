@@ -1,4 +1,4 @@
-package cz.ackee.imageserver;
+package cz.ackee.resizin;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

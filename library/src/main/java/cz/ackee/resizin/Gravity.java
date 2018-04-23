@@ -1,5 +1,8 @@
-package cz.ackee.imageserver;
+package cz.ackee.resizin;
 
+/**
+ * Gravity of {@link Crop}
+ */
 public enum Gravity {
     S("s"),
     N("n"),
@@ -14,7 +17,7 @@ public enum Gravity {
 
     private final String value;
 
-    private Gravity(String value) {
+    Gravity(String value) {
         this.value = value;
     }
 

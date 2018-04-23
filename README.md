@@ -1,30 +1,25 @@
-# Image Server Android Library
-Library providing Url generator for Ackee Image Server
+# Resizin.com Android SDK
+Library providing URL generator for Ackee's resizin.com image server
 ## Dependencies
 ```groovy
-compile 'cz.ackee:imageserver:1.2.4'
+compile 'cz.ackee.resizin:resizin-android-sdk:x.x.x'
 ```
+You can find latest version name in lib.properties
 
 ## Usages
 ### Initialization
 
 ```java
 String appId = ...
-ImageServer imageServer = new ImageServer(appId);
-```
-or with custom image server url
-```java
-String appId = Constants.IMG_SERVER_APP_ID;
-String url = Constants.IMG_SERVER_URL;
-ImageServer imageServer = new ImageServer(appId, url);
+Resizin resizin = new Resizin(appId);
 ```
 
 ### Url generator
 Url generator has multiple options you can set. All of them are optional.
-Values and meaning of Gravity and Crop options are available at https://gitlab.ack.ee/Ackee/image-server#examples
+Values and meaning of Gravity and Crop options are available at https://github.com/AckeeCZ/resizin-android-sdk#examples
 ```java
 public void loadImage(String imageId, ImageView img) {
-    String url = imageServer.urlGenerator()
+    String url = resizin.urlGenerator()
         .width(img.getWidth())
         .height(img.getHeight())
         .gravity(Gravity.CENTER)
@@ -37,11 +32,11 @@ public void loadImage(String imageId, ImageView img) {
 
 
 ### Parsing of urls
-If you have full url, for example from server, and you want to parse it again to ImageServer.UrlGenerator instance, you can do
+If you have full url, for example from server, and you want to parse it again to Resizin.UrlGenerator instance, you can do
 
 ```java
 public void parseUrl(String url) {
-     imageServer.urlGenerator()
+     resizin.urlGenerator()
             .withUrl(url)
             .background("#ffffff")
             .generate();

@@ -1,51 +1,49 @@
-package cz.ackee.imageserver;
-
+package cz.ackee.resizin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 /**
- * Image server instance with variable app id and server url.
+ * Resizin.com server instance with variable app id.
  * Provides UrlGenerator for building image url with various modificators
  * like width, height, crop and gravity
  */
-public class ImageServer {
-    public static final String TAG = ImageServer.class.getName();
-    public static final String IMAGE_SERVER_URL = "https://img.ack.ee/";
+public class Resizin {
+
+    public static final String TAG = Resizin.class.getName();
+    public static final String IMAGE_SERVER_URL = "https://img.resizin.com/";
     private final String appId;
 
-    private String serverUrl;
-
-    public ImageServer(String appid, String serverUrl) {
-        this.appId = appid;
-        this.serverUrl = serverUrl;
-    }
-
-    public ImageServer(String appId) {
-        this(appId, IMAGE_SERVER_URL);
+    /**
+     * @param appId id of your app at the Resizin server
+     */
+    public Resizin(String appId) {
+        this.appId = appId;
     }
 
     /**
      * @return builder class for creating url
      */
-    public ImageServer.UrlGenerator url() {
-        return new ImageServer.UrlGenerator(this.appId, this.serverUrl);
+    public Resizin.UrlGenerator url() {
+        return new Resizin.UrlGenerator(this.appId, IMAGE_SERVER_URL);
     }
 
     /**
      * Parse given url and parse it to instance
+     *
      * @param url
      * @return
      */
-    public ImageServer.UrlGenerator withUrl(String url) {
-        return new ImageServer.UrlGenerator(this.appId, this.serverUrl).parseUrl(url);
+    public Resizin.UrlGenerator withUrl(String url) {
+        return new Resizin.UrlGenerator(this.appId, IMAGE_SERVER_URL).parseUrl(url);
     }
 
     /**
      * Generator of url to image server
      */
     public static class UrlGenerator {
+
         final String serverUrl;
         int width;
         int height;
@@ -77,7 +75,6 @@ public class ImageServer {
             this.serverUrl = serverUrl;
             this.quality = -1;
             this.extension = "";
-            this.upscale = -1;
             imageId = null;
         }
 
@@ -87,7 +84,7 @@ public class ImageServer {
          * @param width of image
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator width(int width) {
+        public Resizin.UrlGenerator width(int width) {
             this.widthSet = true;
             this.width = width;
             return this;
@@ -99,7 +96,7 @@ public class ImageServer {
          * @param height of image
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator height(int height) {
+        public Resizin.UrlGenerator height(int height) {
             this.heightSet = true;
             this.height = height;
             return this;
@@ -111,7 +108,7 @@ public class ImageServer {
          * @param grayscale switch for grayscale filtrer
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator grayscale(boolean grayscale) {
+        public Resizin.UrlGenerator grayscale(boolean grayscale) {
             this.grayscale = grayscale;
             return this;
         }
@@ -123,7 +120,7 @@ public class ImageServer {
          * @param crop of image
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator crop(Crop crop) {
+        public Resizin.UrlGenerator crop(Crop crop) {
             this.cropSet = true;
             this.crop = crop;
             return this;
@@ -136,7 +133,7 @@ public class ImageServer {
          * @param gravity of cropped image
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator gravity(Gravity gravity) {
+        public Resizin.UrlGenerator gravity(Gravity gravity) {
             this.gravitySet = true;
             this.gravity = gravity;
             return this;
@@ -148,7 +145,7 @@ public class ImageServer {
          * @param quality percentual quality of image, values 0 - 100
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator quality(int quality) {
+        public Resizin.UrlGenerator quality(int quality) {
             this.quality = quality;
             return this;
         }
@@ -159,7 +156,7 @@ public class ImageServer {
          * @param extension extension eg. jpg
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator extension(String extension) {
+        public Resizin.UrlGenerator extension(String extension) {
             this.extension = extension;
             return this;
         }
@@ -170,7 +167,7 @@ public class ImageServer {
          * @param upscale boolean indicator
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator upscale(boolean upscale) {
+        public Resizin.UrlGenerator upscale(boolean upscale) {
             this.upscale = upscale ? 1 : 0;
             return this;
         }
@@ -181,7 +178,7 @@ public class ImageServer {
          * @param border width of the border (must be >= 0)
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator border(int border) {
+        public Resizin.UrlGenerator border(int border) {
             this.borderTop = this.borderLeft = this.borderRight = this.borderBottom = border;
             return this;
         }
@@ -195,7 +192,7 @@ public class ImageServer {
          * @param borderBottom width of the top border (must be >= 0)
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator border(int borderTop, int borderLeft, int borderRight, int borderBottom) {
+        public Resizin.UrlGenerator border(int borderTop, int borderLeft, int borderRight, int borderBottom) {
             this.borderTop = borderTop;
             this.borderLeft = borderLeft;
             this.borderRight = borderRight;
@@ -209,7 +206,7 @@ public class ImageServer {
          * @param background color of the background (i.e. "00bcd4" or "#00bcd4")
          * @return UrlGenerator instance
          */
-        public ImageServer.UrlGenerator background(String background) {
+        public Resizin.UrlGenerator background(String background) {
             if (background != null) {
                 if (background.matches("#?[0-9a-fA-F]{6}")) {
                     this.background = background.replace("#", "");
@@ -228,6 +225,7 @@ public class ImageServer {
 
         /**
          * Generate url with previously parsed imageId
+         *
          * @return built url as String
          */
         public String generate() {
@@ -281,7 +279,6 @@ public class ImageServer {
                 transformations.add(String.format(Locale.US, "bg_%s", background));
             }
 
-
             builder.append(this.join("-", transformations));
             builder.append("/");
             builder.append(imageId);
@@ -299,11 +296,10 @@ public class ImageServer {
                 }
                 builder.append(operation);
             }
-
             return builder.toString();
         }
 
-        private ImageServer.UrlGenerator parseUrl(String url) {
+        private Resizin.UrlGenerator parseUrl(String url) {
             try {
                 String[] parts = url.split("/");
                 String imageId = parts[parts.length - 1];
@@ -362,7 +358,6 @@ public class ImageServer {
                         this.background = modificator.substring(3);
                     }
                 }
-
                 return this;
             } catch (Exception e) {
                 throw new InvalidUrlException("Url " + url + " is in incorrect format", e);

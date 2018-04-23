@@ -1,4 +1,4 @@
-package cz.ackee.imageserver;
+package cz.ackee.resizin;
 
 import org.junit.Test;
 

@@ -1,41 +1,37 @@
 import org.junit.Test;
 
-import cz.ackee.imageserver.Crop;
-import cz.ackee.imageserver.Gravity;
-import cz.ackee.imageserver.ImageServer;
+import cz.ackee.resizin.Crop;
+import cz.ackee.resizin.Gravity;
+import cz.ackee.resizin.Resizin;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for parsing of urls
- *
- * @author David Bilik [david.bilik@ackee.cz]
- * @since 12/01/2018
- **/
+ */
 public class ParsingTests {
-    ImageServer imageServer = new ImageServer("test");
 
+    Resizin resizin = new Resizin("test");
 
-    private void assertCorrectlyGenerated(ImageServer.UrlGenerator generator) {
+    private void assertCorrectlyGenerated(Resizin.UrlGenerator generator) {
         String url = generator
                 .generate("image");
 
-        assertEquals(url, imageServer.withUrl(url)
+        assertEquals(url, resizin.withUrl(url)
                 .generate("image"));
     }
 
     @Test
     public void shouldRestoreWidth() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .width(100)
         );
     }
 
-
     @Test
     public void shouldRestoreHeight() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .height(100)
         );
@@ -43,7 +39,7 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreCrop() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .crop(Crop.FACE)
         );
@@ -51,7 +47,7 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreGravity() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .gravity(Gravity.CENTER)
         );
@@ -59,7 +55,7 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreGrayscale() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .grayscale(true)
         );
@@ -67,7 +63,7 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreQuality() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .quality(100)
         );
@@ -75,7 +71,7 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreUpscale() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .upscale(true)
         );
@@ -83,7 +79,7 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreBorders() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .border(6)
         );
@@ -91,7 +87,7 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreBordersAll() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .border(1, 2, 3, 4)
         );
@@ -99,7 +95,7 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreBackground() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .background("#ffffff")
         );
@@ -107,12 +103,12 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreImageId() {
-       assertEquals("test", imageServer.withUrl(imageServer.url().generate("test")).getImageId());
+        assertEquals("test", resizin.withUrl(resizin.url().generate("test")).getImageId());
     }
 
     @Test
     public void shouldRestoreImageIdWithExtension() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .extension("jpg")
         );
@@ -120,7 +116,7 @@ public class ParsingTests {
 
     @Test
     public void shouldRestoreAllAttributes() {
-        assertCorrectlyGenerated(imageServer
+        assertCorrectlyGenerated(resizin
                 .url()
                 .width(100)
                 .height(200)

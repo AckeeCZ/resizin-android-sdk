@@ -1,6 +1,8 @@
-package cz.ackee.imageserver;
+package cz.ackee.resizin;
 
-
+/**
+ * Types of crop avaliable at resizin.com
+ */
 public enum Crop {
     FILL("fill"),
     FIT("fit"),
@@ -10,7 +12,7 @@ public enum Crop {
 
     private final String value;
 
-    private Crop(String value) {
+    Crop(String value) {
         this.value = value;
     }
 

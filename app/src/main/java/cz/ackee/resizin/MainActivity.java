@@ -1,4 +1,4 @@
-package cz.ackee.imageserver;
+package cz.ackee.resizin;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
