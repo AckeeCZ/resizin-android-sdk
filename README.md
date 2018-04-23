@@ -1,3 +1,5 @@
+[ ![Download](https://api.bintray.com/packages/ackeecz/resizin-android-sdk/resizin-android-sdk/images/download.svg) ](https://bintray.com/ackeecz/resizin-android-sdk/resizin-android-sdk/_latestVersion)
+
 # Resizin.com Android SDK
 Library providing URL generator for Ackee's resizin.com image server
 ## Dependencies
