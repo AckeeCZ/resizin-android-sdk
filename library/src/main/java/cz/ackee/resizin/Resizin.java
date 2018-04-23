@@ -32,8 +32,8 @@ public class Resizin {
     /**
      * Parse given url and parse it to instance
      *
-     * @param url
-     * @return
+     * @param url URL of existing image
+     * @return builder class for creating url
      */
     public Resizin.UrlGenerator withUrl(String url) {
         return new Resizin.UrlGenerator(this.appId, IMAGE_SERVER_URL).parseUrl(url);
@@ -175,7 +175,7 @@ public class Resizin {
         /**
          * Specify additional border of the image
          *
-         * @param border width of the border (must be >= 0)
+         * @param border width of the border (must be greater or equal to 0)
          * @return UrlGenerator instance
          */
         public Resizin.UrlGenerator border(int border) {
@@ -186,10 +186,10 @@ public class Resizin {
         /**
          * Specify additional individual borders of the image
          *
-         * @param borderTop    width of the top border (must be >= 0)
-         * @param borderLeft   width of the top border (must be >= 0)
-         * @param borderRight  width of the top border (must be >= 0)
-         * @param borderBottom width of the top border (must be >= 0)
+         * @param borderTop    width of the top border (must be greater or equal to 0)
+         * @param borderLeft   width of the top border (must be greater or equal to 0)
+         * @param borderRight  width of the top border (must be greater or equal to 0)
+         * @param borderBottom width of the top border (must be greater or equal to 0)
          * @return UrlGenerator instance
          */
         public Resizin.UrlGenerator border(int borderTop, int borderLeft, int borderRight, int borderBottom) {
