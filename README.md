@@ -1,10 +1,10 @@
-[ ![Download](https://api.bintray.com/packages/ackeecz/resizin-android-sdk/resizin-android-sdk/images/download.svg) ](https://bintray.com/ackeecz/resizin-android-sdk/resizin-android-sdk/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/ackeecz/resizin-android-sdk/resizin-android-sdk/images/download.svg) ](https://bintray.com/ackeecz/resizin-android-sdk/sdk/_latestVersion)
 
 # Resizin.com Android SDK
 Library providing URL generator for Ackee's resizin.com image server
 ## Dependencies
 ```groovy
-compile 'cz.ackee.resizin:resizin-android-sdk:x.x.x'
+compile 'cz.ackee.resizin:sdk:x.x.x'
 ```
 You can find latest version name in lib.properties
 
