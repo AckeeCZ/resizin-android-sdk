@@ -18,10 +18,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final ImageView img = findViewById(R.id.image);
+
+        /*
+         * If we want to get view dimensions we must wait until its drawn
+         */
         img.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
                 img.getViewTreeObserver().removeOnPreDrawListener(this);
+
                 String url = resizin.url()
                     .crop(Crop.FACE)
                     .width(img.getWidth())
@@ -31,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
                 Picasso.get()
                     .load(url)
                     .into(img);
-
                 return false;
             }
         });
