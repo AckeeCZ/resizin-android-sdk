@@ -65,13 +65,13 @@ class Resizin(private val appId: String) {
             internal set
 
         init {
-            this.width = Integer.MIN_VALUE
-            this.height = Integer.MIN_VALUE
-            this.grayscale = false
-            this.crop = Crop.FIT
-            this.gravity = Gravity.CENTER
-            this.quality = -1
-            this.extension = ""
+            width = Integer.MIN_VALUE
+            height = Integer.MIN_VALUE
+            grayscale = false
+            crop = Crop.FIT
+            gravity = Gravity.CENTER
+            quality = -1
+            extension = ""
             imageId = null
         }
 
