@@ -1,4 +1,4 @@
-package cz.ackee.resizin
+package io.github.ackeecz.resizin.sdk
 
 /**
  * Gravity of [Crop]

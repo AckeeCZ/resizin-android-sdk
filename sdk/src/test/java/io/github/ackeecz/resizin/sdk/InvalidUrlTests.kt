@@ -1,7 +1,5 @@
+package io.github.ackeecz.resizin.sdk
 
-
-import cz.ackee.resizin.InvalidUrlException
-import cz.ackee.resizin.Resizin
 import org.junit.Test
 
 /**
