@@ -1,4 +1,4 @@
-package cz.ackee.resizin
+package io.github.ackeecz.resizin.sdk
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

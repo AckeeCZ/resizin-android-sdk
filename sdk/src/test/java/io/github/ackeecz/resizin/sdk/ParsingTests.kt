@@ -1,8 +1,7 @@
+package io.github.ackeecz.resizin.sdk
 
-
-import cz.ackee.resizin.Crop
-import cz.ackee.resizin.Gravity
-import cz.ackee.resizin.Resizin
+import io.github.ackeecz.resizin.sdk.Crop
+import io.github.ackeecz.resizin.sdk.Gravity
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

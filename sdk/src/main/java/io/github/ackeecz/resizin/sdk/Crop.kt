@@ -1,4 +1,4 @@
-package cz.ackee.resizin
+package io.github.ackeecz.resizin.sdk
 
 /**
  * Types of crop avaliable at resizin.com
