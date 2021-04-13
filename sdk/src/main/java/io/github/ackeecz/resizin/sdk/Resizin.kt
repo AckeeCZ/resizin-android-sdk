@@ -1,7 +1,6 @@
 package io.github.ackeecz.resizin.sdk
 
 import androidx.annotation.VisibleForTesting
-import java.util.ArrayList
 import java.util.Locale
 
 /**
@@ -227,14 +226,28 @@ class Resizin(private val appId: String) {
          */
         @JvmOverloads
         fun generate(imageId: String? = this.imageId): String {
-            val builder = StringBuilder(this.serverUrl)
-            if (!this.serverUrl.endsWith("/")) {
-                builder.append("/")
+            return buildString {
+                append(serverUrl)
+                if (!serverUrl.endsWith("/")) {
+                    append("/")
+                }
+                append(appId).append("/")
+                append("image").append("/")
+                val transformations = createTransformations()
+                append(transformations.filter { it.isNotEmpty() }.joinToString("-"))
+                if (transformations.isNotEmpty()) {
+                    append("/")
+                }
+                append(imageId)
+                if (!extension.isNullOrEmpty()) {
+                    append(".").append(extension)
+                }
             }
+        }
 
-            builder.append(this.appId).append("/")
-            builder.append("image").append("/")
-            val transformations = ArrayList<String>()
+        private fun createTransformations(): List<String> {
+            val transformations = mutableListOf<String>()
+
             if (this.widthSet) {
                 transformations.add(String.format(Locale.US, "w_%d", this.width))
             }
@@ -254,37 +267,24 @@ class Resizin(private val appId: String) {
             if (this.grayscale) {
                 transformations.add("f_greyscale")
             }
+
             if (quality >= 0) {
                 transformations.add(String.format(Locale.US, "q_%d", this.quality))
             }
+
             if (upscale >= 0) {
                 transformations.add(String.format(Locale.US, "u_%d", this.upscale))
             }
+
             if (borderTop >= 0 && borderLeft >= 0 && borderRight >= 0 && borderBottom >= 0) {
                 transformations.add(String.format(Locale.US, "b_%d_%d_%d_%d", borderTop, borderLeft, borderRight, borderBottom))
             }
+
             if (background != null) {
                 transformations.add(String.format(Locale.US, "bg_%s", background))
             }
 
-            builder.append(this.join("-", transformations))
-            builder.append("/")
-            builder.append(imageId)
-            if (this.extension != null && this.extension!!.length > 0) {
-                builder.append(".").append(extension)
-            }
-            return builder.toString()
-        }
-
-        private fun join(delimiter: String, transformations: List<String>): String {
-            val builder = StringBuilder()
-            for (operation in transformations) {
-                if (builder.isNotEmpty()) {
-                    builder.append(delimiter)
-                }
-                builder.append(operation)
-            }
-            return builder.toString()
+            return transformations
         }
 
         internal fun parseUrl(url: String): UrlGenerator {
