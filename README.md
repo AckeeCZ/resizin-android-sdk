@@ -4,7 +4,7 @@
 Library providing URL generator for Ackee's resizin.com image server
 ## Dependencies
 ```groovy
-compile 'io.github.ackeecz:resizin-sdk:x.x.x'
+implementation 'io.github.ackeecz:resizin-sdk:x.x.x'
 ```
 You can find latest version name in lib.properties or in the badge above
 
