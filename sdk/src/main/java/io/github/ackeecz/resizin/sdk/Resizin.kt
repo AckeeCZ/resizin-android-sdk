@@ -45,6 +45,7 @@ class Resizin(private val appId: String) {
         private var height: Int = 0
         private var grayscale: Boolean = false
         private var crop: Crop
+        private var useOriginalImage: Boolean = false
         private var gravity: Gravity
         private var widthSet: Boolean = false
         private var heightSet: Boolean = false
@@ -219,6 +220,17 @@ class Resizin(private val appId: String) {
         }
 
         /**
+         * Specify if should be loaded original image without any processing on the image server
+         *
+         * @param useOriginalImage load original image
+         * @return UrlGenerator instance
+         */
+        fun useOriginalImage(useOriginalImage: Boolean): UrlGenerator {
+            this.useOriginalImage = useOriginalImage
+            return this
+        }
+
+        /**
          * Generates url with specified parameters
          *
          * @param imageId id of image on image server
@@ -232,11 +244,15 @@ class Resizin(private val appId: String) {
                     append("/")
                 }
                 append(appId).append("/")
-                append("image").append("/")
-                val transformations = createTransformations()
-                append(transformations.filter { it.isNotEmpty() }.joinToString("-"))
-                if (transformations.isNotEmpty()) {
-                    append("/")
+                if (useOriginalImage) {
+                    append("original").append("/")
+                } else {
+                    append("image").append("/")
+                    val transformations = createTransformations()
+                    append(transformations.filter { it.isNotEmpty() }.joinToString("-"))
+                    if (transformations.isNotEmpty()) {
+                        append("/")
+                    }
                 }
                 append(imageId)
                 if (!extension.isNullOrEmpty()) {
@@ -291,7 +307,7 @@ class Resizin(private val appId: String) {
             try {
                 val parts = url.split("/".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
                 val imageId = parts[parts.size - 1]
-                if (parts[4] != "image") {
+                if (parts[4] != "image" && parts[4] != "original") {
                     throw Exception()
                 }
                 if (imageId.contains(".")) {
@@ -301,49 +317,53 @@ class Resizin(private val appId: String) {
                     this.imageId = imageId
                 }
 
-                val modificatorsText = parts[parts.size - 2]
-                val modificators = modificatorsText.split("-".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
-                for (modificator in modificators) {
-                    if (modificator.startsWith("w")) {
-                        this.width = Integer.parseInt(modificator.substring(2))
-                        widthSet = true
-                    }
-                    if (modificator.startsWith("h")) {
-                        this.height = Integer.parseInt(modificator.substring(2))
-                        heightSet = true
-                    }
-                    if (modificator.startsWith("c")) {
-                        cropSet = true
-                        crop = Crop.fromValue(modificator.substring(2))
-                    }
+                if (parts[4] == "original") {
+                    this.useOriginalImage = true
+                } else {
+                    val modificatorsText = parts[parts.size - 2]
+                    val modificators = modificatorsText.split("-".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                    for (modificator in modificators) {
+                        if (modificator.startsWith("w")) {
+                            this.width = Integer.parseInt(modificator.substring(2))
+                            widthSet = true
+                        }
+                        if (modificator.startsWith("h")) {
+                            this.height = Integer.parseInt(modificator.substring(2))
+                            heightSet = true
+                        }
+                        if (modificator.startsWith("c")) {
+                            cropSet = true
+                            crop = Crop.fromValue(modificator.substring(2))
+                        }
 
-                    if (modificator.startsWith("g")) {
-                        gravitySet = true
-                        gravity = Gravity.fromValue(modificator.substring(2))
-                    }
+                        if (modificator.startsWith("g")) {
+                            gravitySet = true
+                            gravity = Gravity.fromValue(modificator.substring(2))
+                        }
 
-                    if (modificator.startsWith("f")) {
-                        grayscale = true
-                    }
+                        if (modificator.startsWith("f")) {
+                            grayscale = true
+                        }
 
-                    if (modificator.startsWith("q")) {
-                        quality = Integer.parseInt(modificator.substring(2))
-                    }
+                        if (modificator.startsWith("q")) {
+                            quality = Integer.parseInt(modificator.substring(2))
+                        }
 
-                    if (modificator.startsWith("u")) {
-                        this.upscale = Integer.parseInt(modificator.substring(2))
-                    }
+                        if (modificator.startsWith("u")) {
+                            this.upscale = Integer.parseInt(modificator.substring(2))
+                        }
 
-                    if (modificator.startsWith("b_")) {
-                        val numbersString = modificator.substring(2)
-                        val numbers = numbersString.split("_".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
-                        borderTop = Integer.parseInt(numbers[0])
-                        borderLeft = Integer.parseInt(numbers[1])
-                        borderRight = Integer.parseInt(numbers[2])
-                        borderBottom = Integer.parseInt(numbers[3])
-                    }
-                    if (modificator.startsWith("bg")) {
-                        this.background = modificator.substring(3)
+                        if (modificator.startsWith("b_")) {
+                            val numbersString = modificator.substring(2)
+                            val numbers = numbersString.split("_".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                            borderTop = Integer.parseInt(numbers[0])
+                            borderLeft = Integer.parseInt(numbers[1])
+                            borderRight = Integer.parseInt(numbers[2])
+                            borderBottom = Integer.parseInt(numbers[3])
+                        }
+                        if (modificator.startsWith("bg")) {
+                            this.background = modificator.substring(3)
+                        }
                     }
                 }
                 return this
