@@ -244,11 +244,13 @@ class Resizin(private val appId: String) {
                     append("/")
                 }
                 append(appId).append("/")
+                val transformations = createTransformations()
+                if (useOriginalImage && transformations.isNotEmpty())
+                    throw IllegalStateException("You cannot specify transformations and use original image")
                 if (useOriginalImage) {
                     append("original").append("/")
                 } else {
                     append("image").append("/")
-                    val transformations = createTransformations()
                     append(transformations.filter { it.isNotEmpty() }.joinToString("-"))
                     if (transformations.isNotEmpty()) {
                         append("/")
